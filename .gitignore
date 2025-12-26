@@ -1,0 +1,13 @@
+# Java/Quarkus
+target/
+*.log
+*.tmp
+*.class
+*.jar
+*.war
+
+# VS Code
+.vscode/
+
+# Mac/Linux
+.DS_Store

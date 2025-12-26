@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    command: [ "mongod", "--bind_ip_all" ]
+    networks:
+      - micro-net
+
+  user-service:
+    build:
+      context: ./user-service
+      #      dockerfile: Dockerfile.builder
+      dockerfile: Dockerfile
+    container_name: user-service
+    ports:
+      - "8084:8080"
+    depends_on:
+      - mongo
+    networks:
+      - micro-net
+    volumes:
+      - "$GLOBAL_BACKEND_CODE:/work"
+      - "$M2_FOLDER:/home/quarkus/.m2" # for quarkus user
+      - "$M2_FOLDER:/root/.m2" # for root user
+    environment:
+      QUARKUS_MONGODB_CONNECTION_STRING: mongodb://mongo:27017/userdb
+      QUARKUS_MONGODB_DATABASE: userdb
+      QUARKUS_HTTP_PORT: 8080
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    ports:
+      - "8085:8080"
+    depends_on:
+      - mongo
+    networks:
+      - micro-net
+    environment:
+      QUARKUS_MONGODB_CONNECTION_STRING: mongodb://mongo:27017/productdb
+      QUARKUS_MONGODB_DATABASE: productdb
+      QUARKUS_HTTP_PORT: 8080
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - "8086:8080"
+    depends_on:
+      - mongo
+    networks:
+      - micro-net
+    environment:
+      QUARKUS_MONGODB_CONNECTION_STRING: mongodb://mongo:27017/orderdb
+      QUARKUS_MONGODB_DATABASE: orderdb
+      QUARKUS_HTTP_PORT: 8080
+
+volumes:
+  mongo-data:
+
+networks:
+  micro-net:
