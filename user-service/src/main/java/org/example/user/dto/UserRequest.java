@@ -8,6 +8,7 @@ public class UserRequest {
     @NotBlank(message = "name should not be empty")
     private String name;
 
+    @NotBlank(message = "email should not be empty")
     @Email(message = "email must be valid")
     private String email;
 
