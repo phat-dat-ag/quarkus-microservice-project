@@ -11,3 +11,7 @@ target/
 
 # Mac/Linux
 .DS_Store
+
+# Security keys
+*.pem
+*.key

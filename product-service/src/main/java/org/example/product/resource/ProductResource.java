@@ -1,5 +1,6 @@
 package org.example.product.resource;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -37,6 +38,7 @@ public class ProductResource {
     }
 
     @POST
+    @RolesAllowed({"ADMIN"})
     public Response create(@Valid ProductRequest productRequest) {
         Product product = new Product();
         product.name = productRequest.getName();
@@ -48,6 +50,7 @@ public class ProductResource {
     }
 
     @PUT
+    @RolesAllowed("ADMIN")
     @Path("{id}")
     public Response update(@PathParam("id") String id, @Valid ProductRequest productRequest) {
         Product product = new Product();
@@ -60,6 +63,7 @@ public class ProductResource {
     }
 
     @DELETE
+    @RolesAllowed("ADMIN")
     @Path("{id}")
     public Response delete(@PathParam("id") String id) {
         productService.deleteProduct(id);
