@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
+WORKDIR /deployments
 
-WORKDIR /work
+COPY target/quarkus-app/lib/ lib/
+COPY target/quarkus-app/app/ app/
+COPY target/quarkus-app/quarkus/ quarkus/
+COPY target/quarkus-app/quarkus-run.jar .
 
-COPY target/quarkus-app/quarkus-run.jar ./quarkus-run.jar
-
-EXPOSE 8080
-
-CMD ["java", "-jar", "./quarkus-run.jar"]
+CMD ["java","-jar","quarkus-run.jar"]

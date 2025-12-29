@@ -1,4 +1,9 @@
-FROM eclipse-temurin:17-jdk-alpine
-#COPY target/product-service-1.0.0-SNAPSHOT.jar app.jar
-COPY target/*-runner.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM eclipse-temurin:17-jre
+WORKDIR /deployments
+
+COPY target/quarkus-app/lib/ lib/
+COPY target/quarkus-app/app/ app/
+COPY target/quarkus-app/quarkus/ quarkus/
+COPY target/quarkus-app/quarkus-run.jar .
+
+CMD ["java","-jar","quarkus-run.jar"]

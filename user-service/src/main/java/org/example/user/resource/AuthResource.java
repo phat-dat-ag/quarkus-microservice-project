@@ -12,14 +12,27 @@ import java.util.Set;
 @Produces(MediaType.TEXT_PLAIN)
 public class AuthResource {
     @POST()
-    @Path("/login")
+    @Path("/login/user")
     public String login(){
         String userId = "user-123";
         String role = "USER";
 
         return Jwt.issuer("user-service")
                 .subject(userId)
-                .groups(Set.of(role)) // ROLE
+                .groups(Set.of(role))
+                .expiresIn(3600)
+                .sign();
+    }
+
+    @POST()
+    @Path("/login/admin")
+    public String loginAdmin(){
+        String userId = "admin-123";
+        String role = "ADMIN";
+
+        return Jwt.issuer("user-service")
+                .subject(userId)
+                .groups(Set.of(role))
                 .expiresIn(3600)
                 .sign();
     }
