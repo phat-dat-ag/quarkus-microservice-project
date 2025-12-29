@@ -2,7 +2,9 @@ package org.example.order.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.example.order.dto.ApiResponse;
 import org.example.order.dto.User;
 
 @ApplicationScoped
@@ -12,7 +14,11 @@ public class OrderService {
     UserClient userClient;
 
     public String getUserFormOrder(String id) {
-        User user = userClient.getUserById(id);
-        return user != null ? user.getName() : "Can not find user!";
+        try {
+            ApiResponse<User> response = userClient.getUserById(id);
+            return response.data.getName();
+        } catch (NotFoundException e) {
+            return null;
+        }
     }
 }

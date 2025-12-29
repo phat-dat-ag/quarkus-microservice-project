@@ -1,6 +1,7 @@
 package org.example.product.service;
 
 import org.example.product.entity.Product;
+import org.example.product.factory.ProductTestFactory;
 import org.example.product.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,8 +24,7 @@ public class ProductServiceTest {
 
     @Test
     public void shouldCreateProductWhenQuantityValid(){
-        Product product = new Product();
-        product.quantity = 20;
+        Product product = ProductTestFactory.createValidProduct();
 
         productService.createProduct(product);
         verify(productRepository).save(product);
@@ -32,8 +32,7 @@ public class ProductServiceTest {
 
     @Test
     void shouldThrowExceptionWhenQuantityTooLow() {
-        Product product = new Product();
-        product.quantity = 5;
+        Product product = ProductTestFactory.createInvalidProduct();
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
@@ -68,10 +67,10 @@ public class ProductServiceTest {
 
     @Test
     void shouldUpdateProductWhenExists() {
-        Product existing = new Product();
+        Product existing = ProductTestFactory.createValidProduct();
         existing.quantity = 10;
 
-        Product updated = new Product();
+        Product updated = ProductTestFactory.createValidProduct();
         updated.quantity = 30;
 
         when(productRepository.findById("123"))
